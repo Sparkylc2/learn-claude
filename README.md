@@ -4,6 +4,9 @@
 
 My AI learning system from this video: [How I Use AI to Learn Things](https://www.youtube.com/watch?v=kzcI5F4tGiU).
 
+> [!NOTE]
+> **This fork is being adapted for Claude Code + an Obsidian vault.** See [docs/vault-structure.md](docs/vault-structure.md) for how the vault is laid out, and [`vault/`](vault/) for a mirror of its `CLAUDE.md` files and templates (refresh with `scripts/sync-from-vault.sh`). The pi-specific sections below are from upstream and will be replaced.
+
 This is a personal system I built for myself, shared as-is. Built as a pi configuration: the teaching philosophy encoded in a skill, a few small extensions, and agent definitions.
 
 ## What's in it
