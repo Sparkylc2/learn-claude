@@ -1,42 +1,48 @@
-# learn
+# learn — Claude Code + Obsidian
 
 [![video](assets/thumbnail.png)](https://www.youtube.com/watch?v=kzcI5F4tGiU)
 
-My AI learning system from this video: [How I Use AI to Learn Things](https://www.youtube.com/watch?v=kzcI5F4tGiU).
+My AI learning system, based on [How I Use AI to Learn Things](https://www.youtube.com/watch?v=kzcI5F4tGiU). Forked from [amosblomqvist/learn](https://github.com/amosblomqvist/learn), which was built for pi, and rebuilt for how I actually work: Claude Code (the desktop app's Code tab beside Obsidian, or `claude` in a terminal) teaching me inside my Year 3 Obsidian vault.
 
-> [!NOTE]
-> **This fork is being adapted for Claude Code + an Obsidian vault.** See [docs/vault-structure.md](docs/vault-structure.md) for how the vault is laid out, and [`vault/`](vault/) for a mirror of its `CLAUDE.md` files and templates (refresh with `scripts/sync-from-vault.sh`). The pi-specific sections below are from upstream and will be replaced.
-
-This is a personal system I built for myself, shared as-is. Built as a pi configuration: the teaching philosophy encoded in a skill, a few small extensions, and agent definitions.
+The teaching philosophy is upstream's. The workflow around it is mine.
 
 ## What's in it
 
-- `skills/teach/` — the philosophy and the process
-- `skills/visualize/` — adds a correct, minimal diagram to a lesson when an idea is clearer as a picture
-- `extensions/ask-user-question/` — the agent asks you questions through a UI popup
-- `extensions/quiz/` — graded questions with instant feedback (✓/✗, correct answer, explanation)
-- `extensions/md-log/` — link a markdown file to the session
-- `extensions/visual-tools/` — tools for visualization subagents
-- `agents/` — `researcher`, `svg-maker`, `mermaid-maker`: the subagents the system delegates to
+- `skills/teach/` — the philosophy and the process: probe → plan → teach, with notes written into the vault as the conversation goes
+- `skills/visualize/` — adds a correct, minimal mermaid diagram or SVG to a note
+- `docs/vault-structure.md` — how the vault is laid out and why
+- `vault/` — mirror of the vault's `CLAUDE.md` files and templates
+- `scripts/sync-from-vault.sh` — refreshes `vault/` from the real vault
+
+## How it works
+
+- A session is opened in a class folder. Claude Code loads the vault-wide `CLAUDE.md` plus that class's overrides.
+- Each larger subtopic has a folder under `<Class>/Notes/Learning/`, with a topic index that carries memory between sessions (goal, plan, current level, where we got to).
+- Teaching happens in chat. Notes — concept-ish, problem-ish, or whatever fits — are written when the conversation needs them, linked to what they build on, and tagged `ai-generated`.
+- Quizzes are graded multiple-choice through the Claude Code question popup, logged to `Probes.md`. Notation-heavy questions are written into `Probes.md` first, because the chat doesn't render LaTeX; notes do.
+
+See [docs/vault-structure.md](docs/vault-structure.md) for the full picture.
 
 ## Install
 
-This repo **is** a `.pi` directory. From your learning project's root:
+From the repo root:
 
 ```bash
-git clone https://github.com/amosblomqvist/learn .pi
+mkdir -p ~/.claude/skills
+ln -sfn "$PWD/skills/teach" ~/.claude/skills/teach
+ln -sfn "$PWD/skills/visualize" ~/.claude/skills/visualize
 ```
 
-Then open pi in that directory. (Or copy the pieces you want into your existing project config.)
+Skills are then available in every new Claude Code session. For a fresh vault, copy the contents of `vault/` into it to get the `CLAUDE.md` files and templates.
 
 ## Requirements
 
-- [pi](https://github.com/earendil-works/pi)
-- A subagent implementation, so the system can spawn the researcher and the visual makers. Recommended: [pi-interactive-subagents](https://github.com/amosblomqvist/pi-interactive-subagents) (tmux only). With it, everything works out of the box. Any other implementation works too, but expect to adapt the agent definitions, e.g. `agents/researcher.md` lists `safe_bash` in its tools, which is specific to that extension.
-- `ask-user-question` — use the copy bundled here. If your setup already has an `ask-user-question` extension, use **this** one in its place. Popups from different extensions serialize through a shared UI lock, which only works when it's the same implementation.
+- [Claude Code](https://claude.com/claude-code) — desktop app or CLI
+- [Obsidian](https://obsidian.md) with the Dataview plugin (topic indexes list their notes with it)
+- `rsvg-convert` for checking SVG visuals (`brew install librsvg`)
 
-## Notes
+## Keeping it in sync
 
-You can run the system without subagents. The main session does the teaching. You just lose the researcher (truth verification) and the generated visuals.
-
-The teaching skill is written for one learner (me). Edit the skill to fit how you learn best.
+- **Skills** are edited here. Through the symlinks, changes apply to new sessions immediately.
+- **`CLAUDE.md` files and templates** are edited in the vault. Run `scripts/sync-from-vault.sh`, then commit.
+- **Structure changes** (new folders, conventions) go into `docs/vault-structure.md`.

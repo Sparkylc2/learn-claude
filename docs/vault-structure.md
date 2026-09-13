@@ -8,7 +8,7 @@ How this learning system is laid out on disk, and what each part is for. The rul
 | --- | --- | --- |
 | This repo | Skills (`skills/`), this doc, a mirror of the vault config (`vault/`) | Skills |
 | Obsidian vault — `OneDrive-ImperialCollegeLondon/Year 3/` | Classes, course files, notes, the live `CLAUDE.md` files and templates | `CLAUDE.md` files and templates |
-| `~/.claude/skills/` | Symlinks to this repo's skills, so they work in every Claude Code session (desktop Code tab and terminal). *Not set up yet — part of the install step.* | — |
+| `~/.claude/skills/` | Symlinks to this repo's skills, so they work in every Claude Code session (desktop Code tab and terminal). See the README's install section. | — |
 
 Why split it this way:
 
